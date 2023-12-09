@@ -14,7 +14,7 @@
     </li>
 
     <li class="pagination__item">
-      <a href="#" class="pagination__link pagination__link--arrow" :class="{'pagination__link--disabled': page === pages}" aria-label="Следующая страница" @click.prevent="paginate(page + 1)">
+      <a href="#" class="pagination__link pagination__link--arrow" :class="{'pagination__link--disabled': page === pages - 1}" aria-label="Следующая страница" @click.prevent="paginate(page + 1)">
         <svg width="8" height="14" fill="currentColor">
           <use xlink:href="#icon-arrow-right"></use>
         </svg>
@@ -38,7 +38,9 @@
     },
     methods: {
       paginate(page) {
-        this.$emit('paginate', page);
+        if(page != 0 && page != this.pages + 1) {
+          this.$emit('paginate', page);
+        }
       }
     },
   }

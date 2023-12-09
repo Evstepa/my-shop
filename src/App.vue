@@ -1,7 +1,13 @@
 <template>
   
   <div class="content__catalog">
-      <ProductFilter :price-from.sync="filterPriceFrom" :price-to.sync="filterPriceTo" :category-id.sync="filterCategoryId"></ProductFilter>
+      <ProductFilter 
+        :price-from.sync="filterPriceFrom" 
+        :price-to.sync="filterPriceTo" 
+        :category-id.sync="filterCategoryId" 
+        :color-id.sync="filterColorId"
+        :colors-list="colorsList">
+      </ProductFilter>
 
       <section class="catalog">
         <ProductList :products="products"></ProductList>
@@ -26,8 +32,9 @@ export default {
       filterPriceFrom: 0,
       filterPriceTo: 0,
       filterCategoryId: 0,
+      filterColorId: 0,
       page: 1,
-      productsPerPage: 3,
+      productsPerPage: 6,
     }
   },
   computed: {
@@ -41,7 +48,11 @@ export default {
       };
       if (this.filterCategoryId) {
         filteredProducts = filteredProducts.filter(product => product.categoryId === this.filterCategoryId);
-      }
+      };
+      if (this.filterColorId) {
+        filteredProducts = filteredProducts.filter(product => product.colorsId.includes(this.filterColorId));
+      };
+
       return filteredProducts;
     },
     products() {
@@ -50,7 +61,14 @@ export default {
     },
     countProducts() {
       return this.filteredProducts.length;
-    }
+    },
+    colorsList() {
+      let list = [];
+      products.forEach(product => {
+        list = list.concat(product.colorsId);
+      });
+      return list.filter((item, key) => key === list.indexOf(item));
+    },
   },
 
 }

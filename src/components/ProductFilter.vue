@@ -28,7 +28,15 @@
 
           <fieldset class="form__block">
             <legend class="form__legend">Цвет</legend>
-            <ProductColors :colorsId="colorsId" title="Цвет"/>
+            <ul class="colors">
+              <li class="colors__item" v-for="color in colors" :key="color.id" @click="colorClick(color.id)">
+                <label class="colors__label" :title="color.name">
+                  <input class="colors__radio sr-only" type="radio" name="color" :value="color.id" v-model="currentColorId">
+                  <span class="colors__value" :style="{ background: color.color }">
+                  </span>
+                </label>
+              </li>
+            </ul>
 
           </fieldset>
 
@@ -106,26 +114,25 @@
 <script>
   import categories from "../data/categories";
   import colors from "../data/colors";
-  import ProductColors from './ProductColors';
 
   export default {
     name: 'ProductFilter',
-    components: { ProductColors },
     data() {
       return {
         currentPriceFrom: 0,
         currentPriceTo: 0,
         currentCategoryId: 0,
+        currentColorId: 0,
       };
     },
-    props: ['priceFrom', 'priceTo', 'categoryId'],
+    props: ['priceFrom', 'priceTo', 'categoryId', 'colorId', 'colorsList'],
     computed: {
       categories() {
         return categories;
       },
-      colorsId() {
-        let colorsId = colors.map(item => item.id);
-        return colorsId;
+      colors() {
+        return colors.filter(el => this.colorsList.includes(el.id));
+        // return colors;
       },
     },
     watch: {
@@ -138,17 +145,25 @@
       categoryId(value) {
         this.currentCategoryId = value;
       },
+      colorId(value) {
+        this.currentColorId = value;
+      },
     },
     methods: {
       submit() {
         this.$emit('update:priceFrom', this.currentPriceFrom);
         this.$emit('update:priceTo', this.currentPriceTo);
         this.$emit('update:categoryId', this.currentCategoryId);
+        this.$emit('update:colorId', this.currentColorId);
       },
       reset() {
         this.$emit('update:priceFrom', 0);
         this.$emit('update:priceTo', 0);
         this.$emit('update:categoryId', 0);
+        this.$emit('update:colorId', 0);
+      },
+      colorClick(value) {
+        return this.colors.find(el => el.id === value);
       },
     },
   }

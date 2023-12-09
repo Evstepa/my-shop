@@ -1,7 +1,7 @@
 <template>
   <ul class="catalog__list">
     <li class="catalog__item" v-for="product in products" :key="product.id">
-      <ProductItem :product="product"/>      
+      <ProductItem :product="product" :color-id.sync="colorId"/>      
     </li>
   </ul>
 </template>
@@ -10,6 +10,11 @@
 import ProductItem from "./ProductItem.vue";
 
   export default {
+    data() {
+      return {
+        colorId: 0,
+      } 
+    },
     props: {
       products: {
         type: Array,
