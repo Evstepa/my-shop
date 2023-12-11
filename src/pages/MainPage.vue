@@ -1,5 +1,14 @@
 <template>
-    <div class="content__catalog">
+  <main class="content container">
+    <div class="content__top content__top--catalog">
+      <h1 class="content__title">
+        Каталог
+      </h1>
+      <span class="content__info">
+        152 товара
+      </span>
+    </div>
+    <div class="content__catalog">    
       <ProductFilter 
         :price-from.sync="filterPriceFrom" 
         :price-to.sync="filterPriceTo" 
@@ -12,8 +21,8 @@
         <ProductList :products="products"/>
         <BasePagination v-model="page" :count="countProducts" :per-page="productsPerPage" />
       </section>
-
     </div>
+  </main>
 </template>
 
 <script>

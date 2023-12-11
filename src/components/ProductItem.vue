@@ -1,13 +1,13 @@
 <template>
   <div>
-    <a class="catalog__pic" href="#" @click.prevent="gotoPage('product', {id: product.id})">
+    <router-link class="catalog__pic" :to="{name: 'product', params: {id: product.id}}">
       <img :src="product.image" :srcset="product.imageSmall" :alt="product.title">
-    </a>
+    </router-link>
 
     <h3 class="catalog__title">
-      <a href="#" @click.prevent="gotoPage('product', {id: product.id})">
+      <router-link :to="{name: 'product', params: {id: product.id}}">
         {{ product.title }}
-      </a>
+      </router-link>
     </h3>
 
     <span class="catalog__price">
@@ -29,7 +29,7 @@
 
 <script>
   import colors from "@/data/colors";
-  import gotoPage from "@/helpers/gotoPage";
+  // import gotoPage from "@/helpers/gotoPage";
   import numberFormat from "@/helpers/numberFormat";
 
   export default {
@@ -66,7 +66,7 @@
       colorClick(value) {
         return this.colors.find(el => el.id === value);
       },
-      gotoPage,
+      // gotoPage,
     },
   }
 </script>
