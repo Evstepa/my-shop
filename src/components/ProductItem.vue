@@ -15,10 +15,10 @@
     </span>
 
     <ul class="colors">
-      <li class="colors__item" v-for="color in colors" :key="color.id" @click="colorClick(color.id)">
-        <label class="colors__label" :title="color.name">
+      <li class="colors__item" v-for="color in product.colors" :key="color.id" @click="colorClick(color.id)">
+        <label class="colors__label" :title="color.title">
           <input class="colors__radio sr-only" type="radio" name="color" :value="color.id" v-model="currentColorId">
-          <span class="colors__value" :style="{ background: color.color }">
+          <span class="colors__value" :style="{ background: color.code }">
           </span>
         </label>
       </li>
@@ -28,8 +28,6 @@
 </template>
 
 <script>
-  import colors from "@/data/colors";
-  // import gotoPage from "@/helpers/gotoPage";
   import numberFormat from "@/helpers/numberFormat";
 
   export default {
@@ -54,7 +52,7 @@
     },
     computed: {
       colors() {
-        return colors.filter(el => this.product.colorsId.includes(el.id));
+        return this.product.colors;
       },
     },
     watch: {
@@ -66,7 +64,6 @@
       colorClick(value) {
         return this.colors.find(el => el.id === value);
       },
-      // gotoPage,
     },
   }
 </script>

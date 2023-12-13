@@ -1,7 +1,12 @@
 <template>
   <li class="cart__item product">
     <div class="product__pic">
-      <img :src="item.product.image" width="120" height="120" :srcset="item.product.imageSmall" :alt="item.product.title">
+      <img 
+        :src="item.product.image" width="120" height="120" 
+        :srcset="item.product.imageSmall" 
+        :alt="item.product.title"
+        style="background-color: rgb(237, 232, 232);"
+      >
     </div>
     <h3 class="product__title">
       {{ item.product.title }}
@@ -43,7 +48,7 @@
 
 <script>
   import numberFormat from '@/helpers/numberFormat';
-  import { mapMutations } from 'vuex';
+  import { mapMutations, mapActions } from 'vuex';
 
   export default {
     filters: {
@@ -56,12 +61,13 @@
           return this.item.amount;
         },
         set(value) {
-          this.$store.commit('updateCartProductAmount', {productId: this.item.productId, amount: value}) 
+          this.$store.dispatch('updateCartProductAmount', {productId: this.item.productId, amount: value}) 
         }
       },
     },
     methods: {
-      ...mapMutations({deleteProduct: 'deleteCartProduct'}),
+      // ...mapMutations({deleteProduct: 'deleteCartProduct'}),
+      ...mapActions({deleteProduct: 'deleteCartProduct'}),
       subtractProduct() {
         if (this.amount > 1) {
           this.amount--;

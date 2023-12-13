@@ -1,5 +1,17 @@
 <template>
-  <main class="content container">
+  <main class="content container" v-if="productLoading">
+    <div style="text-align: center;">
+      <p>Загрузка данных о товаре...</p>
+      <img src="/img/radar.gif" alt="Загрузка данных о товаре">
+    </div>   
+  </main>
+  <main class="content container" v-else-if="!productsData">
+    <div style="text-align: center;">
+      <p>Не удалось загрузить данные о товаре.</p>
+      <button @click.prevent="loadProduct">Попробовать ещё раз.</button>
+    </div>
+  </main>
+  <main class="content container" v-else>
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
@@ -63,10 +75,10 @@
             <fieldset class="form__block">
               <legend class="form__legend">Цвет:</legend>
               <ul class="colors">
-                <li class="colors__item" v-for="color in colors" :key="color.id" @click="colorClick(color.id)">
-                  <label class="colors__label" :title="color.name">
+                <li class="colors__item" v-for="color in productsData.colors" :key="color.id" @click="colorClick(color.id)">
+                  <label class="colors__label" :title="color.title">
                     <input class="colors__radio sr-only" type="radio" name="color" :value="color.id">
-                    <span class="colors__value" :style="{ background: color.color }">
+                    <span class="colors__value" :style="{ background: color.code }">
                     </span>
                   </label>
                 </li>
@@ -121,10 +133,12 @@
                 </button>
               </div>
 
-              <button class="button button--primery" type="submit">
+              <button class="button button--primery" type="submit" :disabled="productAddSending">
                 В корзину
               </button>
             </div>
+            <div v-if="productAdded">Товар добавлен в корзину</div>
+            <div v-if="productAddSending">Добавляем товар в корзину...</div>
           </form>
         </div>
       </div>
@@ -183,17 +197,22 @@
 </template>
 
 <script>
-  import products from '@/data/products';
-  import categories from '@/data/categories';
-  import colors from "@/data/colors";
   import gotoPage from "@/helpers/gotoPage";
   import numberFormat from "@/helpers/numberFormat";
+  import axios from 'axios';
+  import {API_BASE_URL} from '@/config';
+  import { mapActions } from "vuex";
 
   export default {
     name: 'ProductPage',
     data() {
       return {
         productAmount: 1,
+        productsData: null,
+        productLoading: false,
+        productLoadingFailed: false,
+        productAdded: false,
+        productAddSending: false,
       };
     },
     filters: {
@@ -201,26 +220,37 @@
     },
     computed: {
       product() {
-        return products.find(product => product.id === +this.$route.params.id);
+        return this.productsData ? 
+          {
+            ...this.productsData,
+            image: this.productsData.image.file.url,
+            colorsId: this.productsData.colors.map(item => item.id),
+          }
+          : [];
       },
       category() {
-        return categories.find(category => category.id === this.product.categoryId);
+        return this.productsData.category;
       },
       colors() {
-        return colors.filter(el => this.product.colorsId.includes(el.id));
+        return this.productsData.colors;
       },
     },
     methods: {
-      gotoPage,
+      ...mapActions(['addProductToCart']),
+      gotoPage, 
       addToCart() {
-        this.$store.commit
-        (
-          'addProductToCart',
+        this.productAdded = false;
+        this.productAddSending = true;
+        this.addProductToCart(
           {
             productId: this.product.id,
             amount: this.productAmount,
           }
-        );
+        )
+        .then(() => {
+          this.productAdded = true;
+          this.productAddSending = false;
+        });
       },
       subtractProduct() {
         if (this.productAmount > 1) {
@@ -229,6 +259,25 @@
       },
       addProduct() {
         this.productAmount++;
+      },
+      loadProduct() {
+        this.productLoading = true;
+        this.productLoadingFailed = false;
+        clearTimeout(this.loadProductTimer);
+        this.loadProductTimer = setTimeout(() => {
+          axios.get(`${API_BASE_URL}/api/products/${this.$route.params.id}`)
+            .then(response => this.productsData = response.data)
+            .catch(() => this.productLoadingFailed = true)
+            .then(() => this.productLoading = false);
+        }, 1000);
+      },
+    },
+    watch: {
+      '$route.params.id': {
+        handler(){
+          this.loadProduct();
+        },
+        immediate: true,
       },
     },
   }
