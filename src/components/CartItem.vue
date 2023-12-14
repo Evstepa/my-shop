@@ -48,7 +48,7 @@
 
 <script>
   import numberFormat from '@/helpers/numberFormat';
-  import { mapMutations, mapActions } from 'vuex';
+  import { mapActions } from 'vuex';
 
   export default {
     filters: {
@@ -66,7 +66,6 @@
       },
     },
     methods: {
-      // ...mapMutations({deleteProduct: 'deleteCartProduct'}),
       ...mapActions({deleteProduct: 'deleteCartProduct'}),
       subtractProduct() {
         if (this.amount > 1) {

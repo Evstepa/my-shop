@@ -8,21 +8,20 @@
   <main class="content container" v-else-if="!products">
     <div style="text-align: center;">
       <p>Не удалось загрузить данные корзины.</p>
-      <button @click.prevent="loadProduct">Попробовать ещё раз.</button>
     </div>
   </main>
   <main class="content container" v-else>
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link" href="index.html">
+          <router-link class="breadcrumbs__link" :to="{name: 'main'}">
             Каталог
-          </a>
+          </router-link>
         </li>
         <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link">
-            Корзина
-          </a>
+          <router-link class="breadcrumbs__link" :to="{name: 'cart'}">
+            Корзина 
+          </router-link>
         </li>
       </ul>
 
@@ -53,9 +52,12 @@
             Итого: <span>{{ totalPrice | numberFormat }} ₽</span>
           </p>
 
-          <button class="cart__button button button--primery" type="submit">
-            Оформить заказ
-          </button>
+          <router-link 
+            tag="button" :to="{name: 'order'}" 
+            class="cart__button button button--primery" type="submit"
+            v-show="totalCount !== 0">
+              Оформить заказ
+          </router-link>
         </div>
       </form>
     </section>
