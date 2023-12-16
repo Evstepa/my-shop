@@ -269,7 +269,7 @@
             .then(response => this.productsData = response.data)
             .catch(() => this.productLoadingFailed = true)
             .then(() => this.productLoading = false);
-        }, 1000);
+        }, 0);
       },
     },
     watch: {
