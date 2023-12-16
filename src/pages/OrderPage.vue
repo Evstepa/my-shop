@@ -41,7 +41,7 @@
             <BaseFormText v-model="formData.address" name="address" title="Адрес доставки" :error="formError.address" placeholder="Введите ваш адрес" />
             <BaseFormText v-model="formData.phone" name="phone" title="Телефон" :error="formError.phone" type="tel" placeholder="Введите ваш телефон" />
             <BaseFormText v-model="formData.email" name="email" title="Email" :error="formError.email" type="email" placeholder="Введи ваш Email" />
-            <BaseFormTextaria v-model="formData.comment" name="comment" title="Комментарий к заказу" :error="formError.comment" placeholder="Ваши пожелания" />
+            <BaseFormTextarea v-model="formData.comment" name="comment" title="Комментарий к заказу" :error="formError.comment" placeholder="Ваши пожелания" />
           </div>
 
           <div class="cart__options">
@@ -119,14 +119,14 @@
 
 <script>
   import BaseFormText from '@/components/BaseFormText.vue';
-  import BaseFormTextaria from '@/components/BaseFormTextaria.vue';
+  import BaseFormTextarea from '@/components/BaseFormTextarea.vue';
   import numberFormat from '@/helpers/numberFormat';
   import { mapGetters } from 'vuex';
   import axios from 'axios';
   import { API_BASE_URL } from '@/config';
 
   export default {
-    components: { BaseFormText, BaseFormTextaria },
+    components: { BaseFormText, BaseFormTextarea },
     data() {
       return {
         formData: {},
