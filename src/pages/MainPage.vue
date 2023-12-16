@@ -20,7 +20,6 @@
       <section class="catalog">
         <div style="text-align: center;" v-if="productsLoading">
         <p>Загрузка списка товаров...</p>
-        <img src="/img/radar.gif" alt="Загрузка списка товаров">
         </div> 
         <div style="text-align: center;" v-if="productsLoadingFailed">
           <p>При загрузке списка товаров произошла ошибка.</p>

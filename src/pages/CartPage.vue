@@ -2,7 +2,6 @@
     <main class="content container" v-if="$store.state.cartLoading">
     <div style="text-align: center;">
       <p>Загрузка корзины...</p>
-      <img src="/img/radar.gif" alt="Загрузка корзины">
     </div>   
   </main>
   <main class="content container" v-else-if="!products">

@@ -2,7 +2,6 @@
   <main class="content container" v-if="productLoading">
     <div style="text-align: center;">
       <p>Загрузка данных о товаре...</p>
-      <img src="/img/radar.gif" alt="Загрузка данных о товаре">
     </div>   
   </main>
   <main class="content container" v-else-if="!productsData">

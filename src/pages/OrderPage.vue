@@ -2,7 +2,6 @@
     <main class="content container" v-if="orderSending">
     <div style="text-align: center;">
       <p>Оформление заказа...</p>
-      <img src="/img/radar.gif" alt="Оформление заказа">
     </div>   
   </main>
   <main class="content container" v-else>
